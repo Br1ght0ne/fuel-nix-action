@@ -1,16 +1,12 @@
 # fuel-nix-action
 
-Install Fuel toolchain using fuel.nix
+Install Fuel toolchain using fuel.nix. Heavily based on [dtolnay's `rust-toolchain` action](https://github.com/dtolnay/rust-toolchain).
 
 ## Example workflow
 
 ```yaml
-name: test suite
-on: [push, pull_request]
-
 jobs:
-  test:
-    name: cargo test
+  build-forc-project:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +16,7 @@ jobs:
 
 ## Inputs
 
-All inputs are optional (have defaults).
+All inputs are optional.
 
 <table>
 <tr>
@@ -28,12 +24,8 @@ All inputs are optional (have defaults).
   <th>Description</th>
 </tr>
 <tr>
-  <td><code>packages</code></td>
-  <td>Comma-separated string of packages to install e.g. <code>forc, fuel-core</code></td>
-</tr>
-<tr>
-  <td><code>milestone</code></td>
-  <td>Milestone of Fuel toolchain to use e.g. <code>latest</code>, <code>testnet</code>, <code>nightly</code></td>
+  <td><code>components</code></td>
+  <td>Comma-separated string of (optionally versioned) components to install e.g. <code>fuel@nightly, forc@0.19.2, fuel-core</code>. Defaults to <code>fuel</code>. See available components at [fuel.nix book](  https://nix.fuel.network/packages.html#packages).</td>
 </tr>
 </table>
 

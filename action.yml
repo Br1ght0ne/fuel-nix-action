@@ -6,31 +6,26 @@ branding:
   icon: zap
 
 inputs:
-  packages:
-    description: Comma-separated list of packages to install, e.g. forc, fuel-core
+  components:
+    description: Comma-separated list of (optionally versioned) components to install
     required: true
     default: fuel
-  milestone:
-    description: Milestone of Fuel toolchain to use, e.g. latest, testnet, nightly
-    required: true
-    default: latest
 
 runs:
   using: composite
   steps:
     - name: Install Nix and configure Cachix
-      uses: cachix/install-nix-action@v27
+      uses: DeterminateSystems/nix-installer-action@main
       with:
-        extra_nix_config: |
+        extra-conf: |
           trusted-public-keys = fuellabs.cachix.org-1:3gOmll82VDbT7EggylzOVJ6dr0jgPVU/KMN6+Kf8qx8= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
           substituters = https://fuellabs.cachix.org https://cache.nixos.org
     - id: parse
       run: |
-        echo "packages=$(for package in ${packages//,/ }; do echo -n  github:FuelLabs/fuel.nix#${package}-${milestone}\ ; done)" >> $GITHUB_OUTPUT
+        echo "components=$(for component in ${components//,/ }; do echo -n  github:FuelLabs/fuel.nix#${component//[@.]/-}\ ; done)" >> $GITHUB_OUTPUT
       env:
-        packages: ${{inputs.packages}}
-        milestone: ${{inputs.milestone}}
+        components: ${{inputs.components}}
       shell: bash
     - name: nix profile install
-      run: nix profile install ${{steps.parse.outputs.packages}}
+      run: nix profile install ${{steps.parse.outputs.components}}
       shell: bash
