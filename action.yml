@@ -26,7 +26,7 @@ runs:
           substituters = https://fuellabs.cachix.org https://cache.nixos.org
     - id: parse
       run: |
-        echo "packages=$(for package in ${packages//,/ }; do echo -n  github:FuelLabs/fuel.nix#${package}-${milestone}; done)" >> $GITHUB_OUTPUT
+        echo "packages=$(for package in ${packages//,/ }; do echo -n  github:FuelLabs/fuel.nix#${package}-${milestone}\ ; done)" >> $GITHUB_OUTPUT
       env:
         packages: ${{inputs.packages}}
         milestone: ${{inputs.milestone}}
